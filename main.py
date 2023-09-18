@@ -7,6 +7,8 @@ import pygame
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import time
+from fastapi.responses import JSONResponse
+
 
 app = FastAPI()
 
@@ -21,8 +23,9 @@ app.add_middleware(
 
 @app.get("/speak")
 async def speak():
-    return {"message": f"Hello from /speak GET endpoint at {time.time()}"}
-
+    response = JSONResponse(content={"message": "Hello from /speak GET endpoint at " + str(time.time())})
+    response.headers["Access-Control-Allow-Origin"] = "http://127.0.0.1:5500"
+    return response
 
 @app.get("/")
 async def welcome():
