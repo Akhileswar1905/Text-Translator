@@ -10,11 +10,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],  # You can specify specific HTTP methods if needed
     allow_headers=["*"],  # You can specify specific headers if needed
