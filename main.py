@@ -10,11 +10,16 @@ import time
 from fastapi.responses import JSONResponse
 
 
-app = FastAPI()
 
+class TextRequest(BaseModel):
+    text: str
+    lang: Optional[str] = "en"
+
+app = FastAPI()
+origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=origins,  
     allow_credentials=True,
     allow_methods=["*"], 
     allow_headers=["*"], 
@@ -24,7 +29,7 @@ app.add_middleware(
 @app.get("/speak")
 async def speak():
     response = JSONResponse(content={"message": "Hello from /speak GET endpoint at " + str(time.time())})
-    response.headers["Access-Control-Allow-Origin"] = "http://127.0.0.1:5500"
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
 @app.get("/")
@@ -33,9 +38,6 @@ async def welcome():
 
 recognizer = sr.Recognizer()
 
-class TextRequest(BaseModel):
-    text: str
-    lang: Optional[str] = "en"
 
 def translate_text(text, lang):
         translator = Translator()
@@ -55,7 +57,7 @@ def say(text, lang="en"):
     pygame.mixer.quit()
 
 @app.post("/speak")
-def speak_text(text_request: TextRequest):
+async def speak_text(text_request: TextRequest):
     say(text_request.text, lang=text_request.lang)
     return {"message": "Text has been spoken"}
 
