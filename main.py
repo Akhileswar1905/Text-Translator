@@ -23,8 +23,12 @@ app.add_middleware(
 
 @app.get("/speak")
 async def speak():
-    # Your code to handle the GET request for /speak goes here
     return {"message": "Hello from /speak GET endpoint"}
+
+
+@app.get("/")
+async def welcome():
+    return "Welcome to the Translator API"
 
 recognizer = sr.Recognizer()
 
