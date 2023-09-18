@@ -1,3 +1,7 @@
+# Translator Demo Code
+
+
+
 import speech_recognition as sr
 from googletrans import Translator
 from gtts import gTTS
