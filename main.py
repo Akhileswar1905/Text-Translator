@@ -6,7 +6,7 @@ from gtts import gTTS
 import pygame
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
-
+import time
 
 app = FastAPI()
 
@@ -14,14 +14,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  
     allow_credentials=True,
-    allow_methods=["*"],  # You can specify specific HTTP methods if needed
-    allow_headers=["*"],  # You can specify specific headers if needed
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
 
 @app.get("/speak")
 async def speak():
-    return {"message": "Hello from /speak GET endpoint"}
+    return {"message": f"Hello from /speak GET endpoint at {time.time()}"}
 
 
 @app.get("/")
