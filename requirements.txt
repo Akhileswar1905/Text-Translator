@@ -5,3 +5,4 @@ googletrans==4.0.0-rc1
 gTTS==2.2.3
 pygame==2.1.2
 uvicorn==0.15.0
+pyttsx3==2.90
