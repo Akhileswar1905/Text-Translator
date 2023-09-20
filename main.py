@@ -8,7 +8,7 @@ from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import time
 from fastapi.responses import JSONResponse
-
+import pyttsx3
 
 
 class TextRequest(BaseModel):
@@ -44,20 +44,19 @@ def translate_text(text, lang):
         translated_text = translator.translate(text, dest="hi")
         return translated_text.text
 
-def say(text, lang="en"):
-    translated_text = translate_text(text, lang)
-    tts = gTTS(text=translated_text, lang="hi", slow=False)
-    filename = "voice.mp3"
-    tts.save(filename)
-    pygame.mixer.init()
-    pygame.mixer.music.load(filename)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)
-    pygame.mixer.quit()
+def say(text,lang):
+    print(f"Before Translation: {text}")
+    text = translate_text(text,lang)
+    print(f"After Translation: {text}")
+    engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[1].id)
+    engine.setProperty('rate', 160)
+    engine.say(text)
+    engine.runAndWait()
 
 @app.post("/speak")
-async def speak_text(text_request: TextRequest):
+def speak_text(text_request: TextRequest):
     say(text_request.text, lang=text_request.lang)
     return {"message": "Text has been spoken"}
 
